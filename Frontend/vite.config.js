@@ -17,10 +17,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          monaco: ['monaco-editor']
+          'monaco-editor': ['monaco-editor'],
+          'monaco-binding': ['y-monaco'],
+          'vendor': ['react', 'react-dom', 'react-router-dom']
         }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000 // Increase limit to 1000kB for Monaco Editor chunk
   },
   optimizeDeps: {
     include: ['monaco-editor']
