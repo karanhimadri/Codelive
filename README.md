@@ -162,8 +162,8 @@ Make sure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/karanhimadri/Codellive----Real_Time_Code-Sharing_Platform.git
-   cd Codellive----Real_Time_Code-Sharing_Platform
+   git clone https://github.com/karanhimadri/Codelive.git
+   cd Codellive
    ```
 
 2. **Setup Backend**

@@ -5,5 +5,3 @@ export const Store = configureStore({
     auth_store: authReducer,
   },
 });
-
-
