@@ -60,22 +60,22 @@ const supportFeatures = [
 
 const ContactMethod = ({ method }) => {
     return (
-        <div className="group bg-white/90 backdrop-blur-xl border border-gray-200/50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        <div className="group bg-white border border-green-200 p-6 transition-colors">
             <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${method.gradient} p-3 mb-4 group-hover:scale-110 transition-transform duration-300`}>
                 <div className="text-white w-full h-full flex items-center justify-center">
                     {method.icon}
                 </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {method.title}
             </h3>
-            <p className="text-gray-600 mb-3">
+            <p className="text-gray-700 mb-2">
                 {method.description}
             </p>
-            <p className="text-gray-800 font-semibold mb-4">
+            <p className="text-green-800 font-medium mb-4">
                 {method.contact}
             </p>
-            <button className={`w-full py-2 px-4 bg-gradient-to-r ${method.gradient} text-white font-medium rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105`}>
+            <button className="w-full py-2 px-4 border border-green-700 text-green-800 text-sm font-medium hover:bg-green-700 hover:text-white transition-colors">
                 {method.action}
             </button>
         </div>
@@ -121,7 +121,7 @@ const ContactForm = () => {
     };
 
     return (
-        <div className="bg-white/90 backdrop-blur-xl border border-gray-200/50 rounded-2xl shadow-xl p-8">
+        <div className="bg-white border border-green-200 p-8">
             <div className="mb-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     Send us a Message
@@ -143,7 +143,7 @@ const ContactForm = () => {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
+                            className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
                             placeholder="John Doe"
                         />
                     </div>
@@ -157,7 +157,7 @@ const ContactForm = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
+                            className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
                             placeholder="john@example.com"
                         />
                     </div>
@@ -171,7 +171,7 @@ const ContactForm = () => {
                         name="inquiryType"
                         value={formData.inquiryType}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
+                        className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
                     >
                         <option value="general">General Inquiry</option>
                         <option value="sales">Sales</option>
@@ -191,7 +191,7 @@ const ContactForm = () => {
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
+                        className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
                         placeholder="How can we help you?"
                     />
                 </div>
@@ -206,7 +206,7 @@ const ContactForm = () => {
                         onChange={handleChange}
                         required
                         rows={5}
-                        className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 resize-none"
+                        className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600 resize-none"
                         placeholder="Tell us more about your inquiry..."
                     />
                 </div>
@@ -214,7 +214,7 @@ const ContactForm = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-full border border-green-700 text-green-800 font-medium py-3 px-6 text-sm hover:bg-green-700 hover:text-white transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isSubmitting ? (
                         <>
@@ -235,23 +235,22 @@ const ContactForm = () => {
 
 const ContactUsSection = () => {
     return (
-        <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16 overflow-hidden">
+    <section className="relative min-h-full bg-gradient-to-br from-green-50 via-white to-emerald-50 py-16 overflow-hidden">
             {/* Background decoration */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-400/10 blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400/10 blur-3xl"></div>
             </div>
 
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-full border border-blue-200/50 mb-6">
+                    <div className="inline-block px-4 py-2 bg-green-50 border border-green-200 mb-6">
                         <span className="text-sm font-semibold text-blue-600">
                             GET IN TOUCH
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-6 leading-tight">
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         Let's Start a
                         <br />
                         Conversation
@@ -265,13 +264,13 @@ const ContactUsSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                     {supportFeatures.map((feature, index) => (
                         <div key={index} className="text-center">
-                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-white mx-auto mb-3">
+                            <div className="w-12 h-12 bg-white border border-green-700 text-green-700 flex items-center justify-center mx-auto mb-3">
                                 {feature.icon}
                             </div>
-                            <h3 className="font-semibold text-gray-900 mb-1">
+                            <h3 className="font-medium text-gray-900 mb-1">
                                 {feature.title}
                             </h3>
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-700 text-xs">
                                 {feature.description}
                             </p>
                         </div>
@@ -298,18 +297,18 @@ const ContactUsSection = () => {
                 </div>
 
                 {/* Bottom section */}
-                <div className="mt-20 text-center p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border border-blue-200/30">
+                <div className="mt-20 text-center p-8 bg-green-50 border border-green-200">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">
                         Join Our Developer Community
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-700 mb-6">
                         Connect with thousands of developers, share knowledge, and get help from our community
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                        <button className="px-6 py-3 border border-green-700 text-green-800 font-medium hover:bg-green-700 hover:text-white transition-colors">
                             Join Discord
                         </button>
-                        <button className="px-6 py-3 bg-white/70 text-blue-600 font-semibold rounded-xl border border-blue-200/50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                        <button className="px-6 py-3 bg-white text-green-800 font-medium border border-green-300 hover:bg-green-50 transition-colors">
                             Browse Forum
                         </button>
                     </div>

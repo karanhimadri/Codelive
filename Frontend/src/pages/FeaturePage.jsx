@@ -84,82 +84,69 @@ const featuresData = [
     },
 ];
 
-const FeatureCard = ({ icon, title, description, gradient, shadowColor, hoverShadow }) => {
+const FeatureCard = ({ icon, title, description }) => {
     return (
-        <div className={`group relative bg-white/90 backdrop-blur-xl border border-gray-200/50 p-8 rounded-2xl shadow-xl ${shadowColor} ${hoverShadow} hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2 overflow-hidden`}>
-            {/* Gradient overlay */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`}></div>
-            
-            {/* Icon container with gradient background */}
-            <div className={`relative w-16 h-16 mx-auto mb-6 rounded-xl bg-gradient-to-br ${gradient} p-3 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <div className="text-white w-full h-full flex items-center justify-center">
-                    {icon}
-                </div>
+        <div className="group relative bg-white border border-green-200 p-8 transition-colors cursor-pointer">
+            {/* Icon container */}
+            <div className="relative w-16 h-16 mx-auto mb-6 bg-white border border-green-700 text-green-700 flex items-center justify-center">
+                {icon}
             </div>
-            
+
             <div className="relative z-10 text-center">
-                <h3 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 transition-all duration-300">
+                <h3 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-green-800 transition-colors">
                     {title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                <p className="text-gray-700 leading-relaxed">
                     {description}
                 </p>
             </div>
-            
-            {/* Subtle border glow effect */}
-            <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10`}></div>
         </div>
     );
 };
 
 const FeaturesSection = () => {
     return (
-        <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16 overflow-hidden">
+    <section className="relative min-h-full bg-gradient-to-br from-green-50 via-white to-emerald-50 py-16 overflow-hidden">
             {/* Background decoration */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-400/10 blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400/10 blur-3xl"></div>
             </div>
-            
+
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center mb-20">
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-full border border-blue-200/50 mb-6">
-                        <span className="text-sm font-semibold text-blue-600">
+                    <div className="inline-block px-4 py-2 bg-green-50 border border-green-200 mb-6">
+                        <span className="text-sm font-semibold text-green-700">
                             POWERFUL FEATURES
                         </span>
                     </div>
-                    <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-6 leading-tight">
+                    <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                         Built for Modern
                         <br />
                         Development
                     </h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
                         Everything you need to build, collaborate, and deploy amazing applications with your team
                     </p>
                 </div>
-                
+
                 {/* Features Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {featuresData.map(({ id, icon, title, description, gradient, shadowColor, hoverShadow }) => (
+                    {featuresData.map(({ id, icon, title, description }) => (
                         <FeatureCard
                             key={id}
                             icon={icon}
                             title={title}
                             description={description}
-                            gradient={gradient}
-                            shadowColor={shadowColor}
-                            hoverShadow={hoverShadow}
                         />
                     ))}
                 </div>
-                
+
                 {/* Bottom CTA */}
                 <div className="text-center mt-20">
-                    <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                        <span className="relative z-10">Get Started Today</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button className="px-8 py-4 border border-green-700 text-green-800 font-semibold hover:bg-green-700 hover:text-white transition-colors">
+                        Get Started Today
                     </button>
                 </div>
             </div>

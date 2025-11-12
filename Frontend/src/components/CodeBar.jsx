@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { assets, languages } from '../assets/assets';
-import { Sun, Moon, Copy, X, MoreVertical, LogOut, Users } from 'lucide-react';
+import { Sun, Moon, Copy, Check, X, MoreVertical, LogOut, Users } from 'lucide-react';
 import { codeContext } from '../context/CodeContextProvider';
 import generateRoomId from '../utils/generateRoomID';
 import { toast } from 'react-toastify';
+import { authContext } from '../context/AuthContextProvider';
+import getFileExtension from '../utils/getFileExtension';
 
 const CodeBar = () => {
   const {
@@ -11,16 +13,16 @@ const CodeBar = () => {
     localCode, setLocalCode, connctionMsg,
     handleRoomCreation, handleRoomJoining, handleRoomLeaving, getAllUsersByRoomId, userLists
   } = useContext(codeContext);
+  const { user } = useContext(authContext);
 
-  const [fileName, setFileName] = useState("firstProgram.js");
-  const [copiedNotify, setCopiedNotify] = useState("");
+  const [fileName, setFileName] = useState("my_code");
+  const [copied, setCopied] = useState(false);
   const [roomsCode, setRoomsCode] = useState({ joinRoomCode: "", createRoomCode: "" });
   const [roomStates, setRoomStates] = useState({ createRoomState: false, joinRoomState: false, divState: false, isUserJoined: false });
   const [threeDotState, setThreeDotState] = useState({ threeState: false });
   const [showJoinedUsers, setShowJoinedUsers] = useState(false);
 
   // Sample joined users list
-  const joinedUsers = ["Alice", "Bob", "Charlie", "David", "Himadri", "Karan", "Allah"];
   const showAllJoinedUsers = () => {
     getAllUsersByRoomId(roomsCode.joinRoomCode);
     setShowJoinedUsers(prev => !prev)
@@ -72,9 +74,9 @@ const CodeBar = () => {
       return;
     }
     navigator.clipboard.writeText(roomsCode.createRoomCode.trim())
-      .then(() => setCopiedNotify("Copied."))
-      .catch(() => setCopiedNotify("Failed to copy."));
-    setTimeout(() => setCopiedNotify(""), 3000);
+      .then(() => setCopied(true))
+      .catch(() => setCopied(false));
+    setTimeout(() => setCopied(false), 1500);
   };
 
   const handleLanguageChange = (e) => setLang(e.target.value);
@@ -94,18 +96,18 @@ const CodeBar = () => {
   };
 
   return (
-    <div className='w-full flex flex-wrap justify-between items-center bg-gradient-to-r from-blue-600 to-blue-500 py-2.5 px-4 md:px-8 shadow-md relative gap-3'>
+    <div className='w-full flex flex-wrap justify-between items-center bg-white border-b border-green-200 py-2.5 px-4 md:px-8 relative gap-3'>
       {/* Left Section */}
       <div className='flex flex-wrap items-center gap-2'>
         <input
-          className='w-40 px-3 py-1.5 text-sm rounded-md bg-white border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300 transition'
+          className='w-40 px-3 py-1.5 text-sm bg-white border border-green-300 focus:outline-none focus:border-green-600'
           type="text"
-          value={fileName}
+          value={`${fileName}${getFileExtension(lang)}`}
           onChange={(e) => setFileName(e.target.value)}
           placeholder="File name"
         />
         <select
-          className='px-3 py-1.5 text-sm rounded-md bg-white border border-blue-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 transition'
+          className='px-3 py-1.5 text-sm bg-white border border-green-300 cursor-pointer focus:outline-none focus:border-green-600'
           onChange={handleLanguageChange}
           value={lang}>
           {languages.map(lang => (
@@ -113,7 +115,7 @@ const CodeBar = () => {
           ))}
         </select>
         <button
-          className='p-1.5 bg-white rounded-md hover:bg-blue-50 border border-blue-200 transition-all duration-200'
+          className='p-1.5 bg-white hover:bg-green-50 border border-green-300 transition-colors'
           onClick={handleThemeOfEditor}
           title={theme === "vs-dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}>
           {theme === "vs-dark" ? <Sun size={18} className='text-yellow-500' /> : <Moon size={18} className='text-blue-600' />}
@@ -121,14 +123,14 @@ const CodeBar = () => {
 
         <div className="relative">
           <button onClick={() => setThreeDotState(prev => ({ ...prev, threeState: !prev.threeState }))}
-            className="p-1.5 bg-white rounded-md hover:bg-blue-50 border border-blue-200 transition-all duration-200"
+            className="p-1.5 bg-white hover:bg-green-50 border border-green-300 transition-colors"
             title="More options">
             <MoreVertical size={18} className='text-gray-600' />
           </button>
           {threeDotState.threeState && (
-            <div className="absolute z-20 top-full mt-1 left-0 min-w-[120px] bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
-              <button onClick={handleClearCode} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-500 hover:text-white transition-colors">Clear Code</button>
-              <button onClick={handleCopyCode} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-500 hover:text-white transition-colors">Copy Code</button>
+            <div className="absolute z-20 top-full mt-1 left-0 min-w-[140px] bg-white border border-green-200 overflow-hidden">
+              <button onClick={handleClearCode} className="w-full px-4 py-2 text-left text-sm text-gray-800 hover:bg-green-700 hover:text-white transition-colors">Clear Code</button>
+              <button onClick={handleCopyCode} className="w-full px-4 py-2 text-left text-sm text-gray-800 hover:bg-green-700 hover:text-white transition-colors">Copy Code</button>
             </div>
           )}
         </div>
@@ -139,12 +141,12 @@ const CodeBar = () => {
         {!roomStates.isUserJoined ? (
           <div className='flex gap-2'>
             <button
-              className='px-4 py-1.5 text-sm font-medium text-white bg-blue-700 rounded-md hover:bg-white hover:text-blue-700 border border-white transition-all duration-200 shadow-sm'
+              className='px-4 py-1.5 text-sm font-medium text-green-800 border border-green-700 hover:bg-green-700 hover:text-white transition-colors'
               onClick={handleOnClickCreateRoom}>
               Create Room
             </button>
             <button
-              className='px-4 py-1.5 text-sm font-medium bg-white text-blue-700 rounded-md hover:bg-blue-50 border border-blue-200 transition-all duration-200 shadow-sm'
+              className='px-4 py-1.5 text-sm font-medium bg-white text-green-800 border border-green-300 hover:bg-green-50 transition-colors'
               onClick={() => setRoomStates(prev => ({
                 ...prev,
                 createRoomState: false,
@@ -156,21 +158,21 @@ const CodeBar = () => {
           </div>
         ) : (
           <div className='flex items-center gap-2'>
-            <div className='flex items-center gap-3 px-3 py-1.5 bg-white rounded-md border border-blue-200 shadow-sm'>
+            <div className='flex items-center gap-3 px-3 py-1.5 bg-white border border-green-200'>
               <video className="w-5" autoPlay muted loop>
                 <source src={assets.LIVE_video} type="video/mp4" />
               </video>
-              <p className='text-sm text-gray-700'>Room: <span className='font-semibold text-blue-700'>{roomsCode.joinRoomCode}</span></p>
+              <p className='text-sm text-gray-700'>Room: <span className='font-semibold text-green-700'>{roomsCode.joinRoomCode}</span></p>
               <button onClick={() => showAllJoinedUsers()}
                 className='flex items-center gap-1 text-sm hover:opacity-80 transition'
                 title="View joined users">
-                <Users size={18} className='text-blue-600' />
+                <Users size={18} className='text-green-700' />
                 <span className='font-medium text-gray-700'>{totalUser}</span>
               </button>
             </div>
             <button
               onClick={handleOnClickLeavingRoom}
-              className='p-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 border border-red-400 transition-all duration-200 shadow-sm'
+              className='p-1.5 bg-red-500 text-white hover:bg-red-600 border border-red-400 transition-colors'
               title="Leave Room">
               <LogOut size={18} />
             </button>
@@ -179,15 +181,15 @@ const CodeBar = () => {
 
         {/* Room Code Entry Box */}
         {roomStates.divState && (
-          <div className='absolute top-[110%] right-0 w-80 bg-white shadow-xl rounded-lg border border-gray-200 z-50 overflow-hidden'>
-            <div className='bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-3 border-b border-gray-200'>
+          <div className='absolute top-[110%] right-0 w-80 bg-white border border-green-200 z-50'>
+            <div className='bg-green-50 px-4 py-3 border-b border-green-200'>
               <div className='flex justify-between items-center'>
                 <p className='text-sm font-medium text-gray-700'>
                   {roomStates.createRoomState ? "Share Room Code" : "Join a Room"}
                 </p>
                 <button
                   onClick={() => setRoomStates(prev => ({ ...prev, divState: false }))}
-                  className='text-gray-500 hover:text-gray-700 transition'>
+                  className='text-gray-600 hover:text-green-700 transition-colors'>
                   <X size={18} />
                 </button>
               </div>
@@ -203,22 +205,22 @@ const CodeBar = () => {
                 <div className='flex items-center gap-2'>
                   <input
                     readOnly
-                    className='flex-1 border border-gray-300 px-3 py-2 rounded-md bg-gray-50 text-gray-800 font-mono text-sm focus:outline-none'
+                    className='flex-1 border border-green-300 px-3 py-2 bg-gray-50 text-gray-800 font-mono text-sm focus:outline-none'
                     value={roomsCode.createRoomCode}
                   />
                   <button
                     onClick={handleCopy}
-                    className='p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200'
-                    title="Copy code">
-                    <Copy size={16} />
+                    className={`p-2 border transition-colors ${copied ? 'border-green-700 bg-green-700 text-white' : 'border-green-700 text-green-800 hover:bg-green-700 hover:text-white'}`}
+                    title={copied ? 'Copied' : 'Copy code'}
+                  >
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
                   </button>
-                  {copiedNotify && <span className='text-xs text-green-600 font-medium'>{copiedNotify}</span>}
                 </div>
               )}
               {roomStates.joinRoomState && (
                 <div className='flex items-center gap-2'>
                   <input
-                    className='flex-1 border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm'
+                    className='flex-1 border border-green-300 px-3 py-2 focus:outline-none focus:border-green-600 text-sm'
                     value={roomsCode.joinRoomCode}
                     onChange={(e) => setRoomsCode(prev => ({ ...prev, joinRoomCode: e.target.value }))}
                     placeholder="Enter 6-digit code"
@@ -226,7 +228,7 @@ const CodeBar = () => {
                   />
                   <button
                     onClick={handleJoinRoomCode}
-                    className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-200 text-sm font-medium'>
+                    className='px-4 py-2 border border-green-700 text-green-800 hover:bg-green-700 hover:text-white transition-colors text-sm font-medium'>
                     Join
                   </button>
                 </div>
@@ -236,21 +238,21 @@ const CodeBar = () => {
         )}
 
         {/* Joined Users Card */}
-        {showJoinedUsers && (
-          <div className='absolute top-[115%] right-0 w-80 bg-white border border-gray-200 shadow-xl rounded-lg z-50 overflow-hidden'>
-            <div className='bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-3 border-b border-gray-200'>
+        {user && showJoinedUsers && (
+          <div className='absolute top-[115%] right-0 w-80 bg-white border border-green-200 z-50'>
+            <div className='bg-green-50 px-4 py-3 border-b border-green-200'>
               <div className='flex justify-between items-center'>
-                <p className='text-sm font-semibold text-gray-800'>Active Users</p>
+                <p className='text-sm font-semibold text-gray-900'>Active Users</p>
                 <button
                   onClick={() => setShowJoinedUsers(false)}
-                  className='text-gray-500 hover:text-gray-700 transition'>
+                  className='text-gray-600 hover:text-green-700 transition-colors'>
                   <X size={18} />
                 </button>
               </div>
             </div>
 
             <ul className="max-h-60 overflow-y-auto p-3 space-y-1">
-              <li className="flex justify-between items-center px-3 py-2 text-sm rounded-md bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-300 shadow-sm">
+              <li className="flex justify-between items-center px-3 py-2 text-sm bg-yellow-50 border border-yellow-300">
                 <span className="font-semibold text-yellow-800 flex items-center gap-1">
                   <span className='text-base'>👑</span> {userLists.creator}
                 </span>
@@ -260,7 +262,7 @@ const CodeBar = () => {
               {users.map((user, i) => (
                 <li
                   key={i}
-                  className="flex justify-between items-center px-3 py-2 text-sm rounded-md bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 transition-colors"
+                  className="flex justify-between items-center px-3 py-2 text-sm bg-gray-50 hover:bg-green-50 border border-gray-200 hover:border-green-300 transition-colors"
                 >
                   <span className='text-gray-800'>{user.name}</span>
                   <span className="text-xs text-gray-500">{user.joined_at}</span>

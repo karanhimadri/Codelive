@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { authContext } from "./AuthContextProvider";
 
@@ -9,8 +8,7 @@ import { WebsocketProvider } from "y-websocket";
 export const codeContext = createContext();
 
 const CodeContextProvider = ({ children }) => {
-  const { user } = useSelector((store) => store.auth_store);
-  const { tempUserName } = useContext(authContext);
+  const { user } = useContext(authContext);
 
   // ================== State ==================
   const [socket, setSocket] = useState(null);
@@ -37,8 +35,8 @@ const CodeContextProvider = ({ children }) => {
 
   // ================== Username Setup ==================
   useEffect(() => {
-    setUserName(user?.given_name || user?.name || tempUserName || "Guest");
-  }, [user, tempUserName]);
+    setUserName(user ? user.username : "");
+  }, [user]);
 
   // ================== Socket.IO Setup ==================
   useEffect(() => {

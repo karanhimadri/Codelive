@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { authContext } from "../context/AuthContextProvider";
 import GoogleOAuth from "./GoogleOAuth";
 
@@ -16,22 +16,22 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login Data:", formData);
-    onClose();
+    setLoginState(false);
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-96 max-w-[90%] animate-fadeIn relative z-50">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div className="bg-white p-6 border border-green-200 w-96 max-w-[90%] animate-fadeIn relative z-50">
+        <h2 className="text-xl font-semibold mb-4 text-center text-gray-900">Login</h2>
         <GoogleOAuth />
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-3">
           <input
             type="email"
             name="email"
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
             required
           />
           <input
@@ -40,19 +40,19 @@ const Login = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 bg-white border border-green-300 text-sm focus:outline-none focus:border-green-600"
             required
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+            className="w-full border border-green-700 text-green-800 py-3 text-sm font-medium hover:bg-green-700 hover:text-white transition-colors"
           >
             Login
           </button>
         </form>
         <button
           onClick={() => setLoginState(false)}
-          className="mt-4 w-full text-gray-500 hover:text-gray-700 transition"
+          className="mt-3 w-full text-gray-700 hover:text-green-700 transition-colors text-sm"
         >
           Cancel
         </button>

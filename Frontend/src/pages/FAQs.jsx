@@ -60,39 +60,34 @@ const faqData = [
     }
 ];
 
-const categories = ["All", "Collaboration", "Security", "Development", "Getting Started", "Pricing", "Deployment", "Support", "Features"];
+// Categories removed: simplifying FAQ page to a single list without filters
 
 const FAQItem = ({ faq, isOpen, onToggle }) => {
     return (
-        <div className="group bg-white/90 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+        <div className="group bg-white border border-green-200 transition-colors overflow-hidden">
             <button
                 onClick={onToggle}
-                className="w-full p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500/20 rounded-xl"
+                className="w-full p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-green-500/20"
             >
                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-10 h-10 bg-white border border-green-600 text-green-700 flex items-center justify-center">
                         {faq.icon}
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
                             {faq.question}
                         </h3>
-                        <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full">
-                            {faq.category}
-                        </span>
                     </div>
                 </div>
                 <ChevronDown
-                    className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''
-                        }`}
+                    className={`w-5 h-5 text-green-700 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                 />
             </button>
 
-            <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}>
+            <div className={`overflow-hidden transition-all ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <div className="px-6 pb-6">
                     <div className="pl-14">
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-gray-700 leading-relaxed">
                             {faq.answer}
                         </p>
                     </div>
@@ -104,7 +99,6 @@ const FAQItem = ({ faq, isOpen, onToggle }) => {
 
 const FAQSection = () => {
     const [openItems, setOpenItems] = useState(new Set([1])); // First item open by default
-    const [activeCategory, setActiveCategory] = useState("All");
 
     const toggleItem = (id) => {
         const newOpenItems = new Set(openItems);
@@ -116,52 +110,35 @@ const FAQSection = () => {
         setOpenItems(newOpenItems);
     };
 
-    const filteredFAQs = activeCategory === "All"
-        ? faqData
-        : faqData.filter(faq => faq.category === activeCategory);
+    const filteredFAQs = faqData; // Show all FAQs without filtering
 
     return (
-        <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 py-16 overflow-hidden">
+    <section className="relative min-h-full bg-gradient-to-br from-green-50 via-white to-emerald-50 py-16 overflow-hidden">
             {/* Background decoration */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl"></div>
-                <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-pink-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-400/10 blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400/10 blur-3xl"></div>
             </div>
 
             <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600/10 to-blue-600/10 rounded-full border border-purple-200/50 mb-6">
-                        <span className="text-sm font-semibold text-purple-600">
+                    <div className="inline-block px-4 py-2 bg-green-50 border border-green-200 mb-6">
+                        <span className="text-sm font-semibold text-green-700">
                             FREQUENTLY ASKED QUESTIONS
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-purple-800 to-blue-800 bg-clip-text text-transparent mb-6 leading-tight">
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         Got Questions?
                         <br />
                         We've Got Answers
                     </h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
                         Find answers to the most common questions about our development platform
                     </p>
                 </div>
 
-                {/* Category Filter */}
-                <div className="flex flex-wrap justify-center gap-2 mb-12">
-                    {categories.map((category) => (
-                        <button
-                            key={category}
-                            onClick={() => setActiveCategory(category)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeCategory === category
-                                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
-                                    : 'bg-white/70 text-gray-600 hover:bg-white hover:text-purple-600 border border-gray-200/50'
-                                }`}
-                        >
-                            {category}
-                        </button>
-                    ))}
-                </div>
+                {/* Category filter removed for simplicity */}
 
                 {/* FAQ Items */}
                 <div className="space-y-4">
@@ -176,18 +153,18 @@ const FAQSection = () => {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="text-center mt-16 p-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border border-purple-200/30">
+                <div className="text-center mt-16 p-8 bg-green-50 border border-green-200">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">
                         Still have questions?
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-700 mb-6">
                         Our support team is here to help you get started
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                        <button className="px-6 py-3 bg-green-700 text-white font-semibold border border-green-700 hover:bg-white hover:text-green-800 transition-colors">
                             Contact Support
                         </button>
-                        <button className="px-6 py-3 bg-white/70 text-purple-600 font-semibold rounded-xl border border-purple-200/50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                        <button className="px-6 py-3 bg-white text-green-800 font-semibold border border-green-300 hover:bg-green-50 transition-colors">
                             View Documentation
                         </button>
                     </div>

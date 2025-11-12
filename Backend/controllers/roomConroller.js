@@ -1,5 +1,4 @@
-const { 
-  createNewRoom, 
+const {
   joinRoom, 
   totalUsersAtRoom, 
   leaveRoom, 

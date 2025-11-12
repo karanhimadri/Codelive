@@ -81,7 +81,7 @@ const MonacoEditor = () => {
 
   if (error) {
     return (
-      <div style={{ height: "575px", width: "100%", padding: "20px", background: "#1e1e1e", color: "#ff6b6b" }}>
+      <div style={{ height: "583px", width: "100%", padding: "20px", background: "#1e1e1e", color: "#ff6b6b" }}>
         <h3>Error loading editor:</h3>
         <p>{error}</p>
       </div>
@@ -90,16 +90,20 @@ const MonacoEditor = () => {
 
   if (isLoading && (!yText || !yProvider)) {
     return (
-      <div style={{ height: "575px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#1e1e1e", color: "#fff" }}>
+      <div style={{ height: "583px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#1e1e1e", color: "#fff" }}>
         <div>
-          <p>⏳ Initializing editor...</p>
+          <p>⏳ Editor is ready..</p>
           <p style={{ fontSize: "12px", opacity: 0.7 }}>Please create or join a room.</p>
         </div>
       </div>
     );
   }
 
-  return <div id="editor" ref={containerRef} style={{ height: "575px", width: "100%" }} />;
+  return (
+    <div className="bg-white border border-green-200" style={{ width: "100%" }}>
+      <div id="editor" ref={containerRef} style={{ height: "583px", width: "100%" }} />
+    </div>
+  );
 };
 
 export default MonacoEditor;
