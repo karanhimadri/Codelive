@@ -86,12 +86,12 @@ const ChatBox = () => {
         />
         <button
           disabled={!user}
-          className={`px-4 py-2 border text-sm font-medium transition-colors flex-shrink-0 ${theme === 'light' ? 'border-green-700 text-green-800 hover:bg-green-700 hover:text-white bg-white/60' : 'border-green-500 text-green-300 hover:bg-green-600 hover:text-white bg-[#2a3942]/60'} ${!user ? 'opacity-60 cursor-not-allowed' : ''}`}
+          className={`w-10 h-10 rounded-full border transition-colors flex-shrink-0 flex items-center justify-center ${theme === 'light' ? 'border-green-700 text-green-800 hover:bg-green-700 hover:text-white bg-white' : 'border-green-500 text-green-300 hover:bg-green-600 hover:text-white bg-[#2a3942]'} ${!user ? 'opacity-60 cursor-not-allowed' : ''}`}
           onClick={handleSendMessageBtn}
           aria-label="Send message"
           title="Send"
         >
-          <SendIcon size={16} className="inline-block" />
+          <SendIcon size={18} />
         </button>
       </div>
 

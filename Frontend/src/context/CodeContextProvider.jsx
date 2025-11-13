@@ -30,8 +30,8 @@ const CodeContextProvider = ({ children }) => {
   const [yProvider, setYProvider] = useState(null);
   const [yText, setYText] = useState(null);
 
-  const SOCKET_URL = "http://localhost:8080";
-  const YJS_URL = "ws://localhost:8080/yjs";
+  const SOCKET_URL = import.meta.env.VITE_API_URL;
+  const YJS_URL = `ws://${import.meta.env.VITE_YJS_WS_URL}/yjs`;
 
   // ================== Username Setup ==================
   useEffect(() => {
