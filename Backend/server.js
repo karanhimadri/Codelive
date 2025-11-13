@@ -24,11 +24,16 @@ const app = express();
 const server = http.createServer(app);
 
 // ----------------------
-// Express setup
+// Express & CORS setup
 // ----------------------
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://codelive.apps24.tech",
+];
+
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ALLOWED_ORIGINS,
   methods: ["GET", "POST"],
   credentials: true
 }));
@@ -44,7 +49,7 @@ app.post("/api/create-room", createRoomAPI);
 const io = socketIo(server, {
   path: "/socket.io",
   cors: {
-    origin: "http://localhost:5173",
+    origin: ALLOWED_ORIGINS,
     methods: ["GET", "POST"],
     credentials: true
   },

@@ -32,7 +32,7 @@ const MonacoEditor = () => {
         theme: theme || "vs-dark",
         value: "", // initial empty; Yjs will sync actual code
         automaticLayout: true,
-        fontSize: 13,
+        fontSize: 14,
         lineHeight: 25,
         minimap: { enabled: false },
         wordWrap: "on",

@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import CodeContextProvider from './context/CodeContextProvider.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 import { GoogleOAuthProvider, } from "@react-oauth/google";
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 createRoot(document.getElementById('root')).render(
 
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')).render(
     <CodeContextProvider>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <ScrollToTop />
           <App />
           <AuthPage />
         </BrowserRouter>
