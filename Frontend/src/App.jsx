@@ -18,7 +18,7 @@ const App = () => {
   
   useEffect(() => {
     getUserDetails();
-  }, [])
+  })
 
   return (
     <div className="min-h-screen flex flex-col">

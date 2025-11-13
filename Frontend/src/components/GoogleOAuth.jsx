@@ -19,7 +19,7 @@ const GoogleOAuth = () => {
       setLoginState(false)
       setSignupState(false)
     } catch (error) {
-      toast.error("Error decoding token.");
+      toast.error("Error decoding token.",error.message);
     }
   };
 
