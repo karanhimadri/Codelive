@@ -18,6 +18,7 @@ const CodeContextProvider = ({ children }) => {
   const [lang, setLang] = useState("plaintext");
   const [theme, setTheme] = useState("vs-dark");
   const [localCode, setLocalCode] = useState("Hello, welcome to CodeLIVE");
+  const [editorInstance, setEditorInstance] = useState(null);
 
   const [userMessages, setUserMessages] = useState([]);
   const [connctionMsg, setConnctionMsg] = useState({ successMsg: "", errorMsg: "" });
@@ -35,7 +36,7 @@ const CodeContextProvider = ({ children }) => {
 
   // ================== Username Setup ==================
   useEffect(() => {
-    setUserName(user ? user.username : "");
+    setUserName(user ? user.username : `Guest-${Math.floor(1000 + Math.random() * 9000)}`);
   }, [user]);
 
   // ================== Socket.IO Setup ==================
@@ -90,14 +91,6 @@ const CodeContextProvider = ({ children }) => {
       setUserMessages((prev) => [...prev, { sender: name, local: 0, msg: message }])
     );
 
-    socketInstance.on("allUsers", (response) => {
-      setUserLists({
-        creator: response.created_by,
-        created_at: response.created_at,
-        users: response.users,
-      });
-    });
-
     socketInstance.on("seeAllUsers", (response) => {
       if (response && response.success) {
         setUserLists({
@@ -149,7 +142,7 @@ const CodeContextProvider = ({ children }) => {
 
   // ================== Room Management ==================
   const handleRoomCreation = async (roomCode) => {
-    if (!roomCode) return;
+    if (!roomCode) return false;
 
     try {
       const response = await fetch(`${SOCKET_URL}/api/create-room`, {
@@ -157,28 +150,40 @@ const CodeContextProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ roomId: roomCode, name: userName }),
+        body: JSON.stringify({ roomId: roomCode, name: userName || "Guest" }),
       });
-
       const data = await response.json();
 
       if (data.success) {
-        alert(`Room created successfully! You can now join it.`);
+        console.log(`Room created successfully! You can now join it.`);
+        return true;
       } else {
-        alert(`Failed to create room: ${data.message}`);
+        console.log(`Failed to create room: ${data.message}`);
+        return false;
       }
-    } catch (error) {
-      console.error(`❌ Error creating room: ${error.message}`);
-      alert("Error creating room. Please try again.");
+    } catch {
+      console.log("Error creating room. Please try again.");
+      return false;
     }
   };
 
   const handleRoomJoining = (roomCode) => {
-    localStorage.setItem("roomId", roomCode);
-    localStorage.setItem("username", userName);
-    setRoomCode(roomCode);
+    if (!roomCode) {
+      console.warn("Room code missing");
+      return false;
+    }
 
-    socket?.emit("joinRoom", { name: userName, roomCode });
+    try {
+      localStorage.setItem("roomId", roomCode);
+      localStorage.setItem("username", userName || "Guest");
+      setRoomCode(roomCode);
+
+      socket?.emit("joinRoom", { name: userName, roomCode });
+      return true;
+    } catch (err) {
+      console.error("Failed to join room:", err);
+      return false;
+    }
   };
 
   const handleRoomLeaving = (roomCode) => {
@@ -206,6 +211,9 @@ const CodeContextProvider = ({ children }) => {
     theme,
     setLang,
     setTheme,
+    setLocalCode,
+    editorInstance,
+    setEditorInstance,
 
     // socket + room
     socket,

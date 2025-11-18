@@ -7,19 +7,20 @@ import CodeContextProvider from './context/CodeContextProvider.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 import { GoogleOAuthProvider, } from "@react-oauth/google";
 import ScrollToTop from './components/ScrollToTop.jsx'
+import { AiProvider } from './context/AiContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-
   <AuthContextProvider>
-    <CodeContextProvider>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <ScrollToTop />
-          <App />
-          <AuthPage />
-        </BrowserRouter>
-      </GoogleOAuthProvider>
-    </CodeContextProvider>
+    <AiProvider>
+      <CodeContextProvider>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <ScrollToTop />
+            <App />
+            <AuthPage />
+          </BrowserRouter>
+        </GoogleOAuthProvider>
+      </CodeContextProvider>
+    </AiProvider>
   </AuthContextProvider>
-
 )

@@ -81,6 +81,8 @@ const getAllUsersController = async (io, socket, roomId) => {
     if (!response || !response.success) {
       return;
     }
+
+    console.log(response)
     
     // Emit to all users in the room (including the requester)
     io.to(roomId).emit("seeAllUsers", response);

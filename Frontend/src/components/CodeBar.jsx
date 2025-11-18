@@ -1,19 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
 import { assets, languages } from '../assets/assets';
-import { Sun, Moon, Copy, Check, X, MoreVertical, LogOut, Users } from 'lucide-react';
+import { Sun, Moon, Copy, Check, X, MoreVertical, LogOut, Users, Sparkles } from 'lucide-react';
 import { codeContext } from '../context/CodeContextProvider';
 import generateRoomId from '../utils/generateRoomID';
 import { toast } from 'react-toastify';
 import { authContext } from '../context/AuthContextProvider';
 import getFileExtension from '../utils/getFileExtension';
+import { useAI } from '../context/AiContext';
+import * as monaco from 'monaco-editor';
 
 const CodeBar = () => {
   const {
     theme, lang, totalUser, setLang, setTheme, setRoomCode,
     localCode, setLocalCode, connctionMsg,
-    handleRoomCreation, handleRoomJoining, handleRoomLeaving, getAllUsersByRoomId, userLists
+    handleRoomCreation, handleRoomJoining, handleRoomLeaving, getAllUsersByRoomId, userLists,
+    yText, editorInstance
   } = useContext(codeContext);
   const { user } = useContext(authContext);
+  const { generateCode } = useAI();
 
   const [fileName, setFileName] = useState("my_code");
   const [copied, setCopied] = useState(false);
@@ -21,6 +25,9 @@ const CodeBar = () => {
   const [roomStates, setRoomStates] = useState({ createRoomState: false, joinRoomState: false, divState: false, isUserJoined: false });
   const [threeDotState, setThreeDotState] = useState({ threeState: false });
   const [showJoinedUsers, setShowJoinedUsers] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [loading, setLoading] = useState({ createRoomLoading: false, joinRoomLoading: false })
 
   // Sample joined users list
   const showAllJoinedUsers = () => {
@@ -42,13 +49,24 @@ const CodeBar = () => {
     setUsers(filtered);
   }, [userLists]);
 
-  const handleOnClickCreateRoom = () => {
-    setRoomStates(prev => ({ ...prev, createRoomState: true, divState: true, joinRoomState: false }));
+  const handleOnClickCreateRoom = async () => {
     if (roomsCode.createRoomCode.trim() === "") {
       const roomID = generateRoomId();
-      handleRoomCreation(roomID);
-      setRoomsCode(prev => ({ ...prev, createRoomCode: roomID }));
+      setLoading(prev => ({ ...prev, createRoomLoading: true }))
+      const res = await handleRoomCreation(roomID);
+      console.log(res)
+      if (res) {
+        setRoomStates(prev => ({ ...prev, createRoomState: true, divState: true, joinRoomState: false }));
+        setRoomsCode(prev => ({ ...prev, createRoomCode: roomID }));
+        setLoading(prev => ({ ...prev, createRoomLoading: false }))
+      } else {
+        toast.warn("Unable to create room..")
+        setLoading(prev => ({ ...prev, createRoomLoading: false }))
+      }
+      return;
     }
+    toast.warn("Room has been created.")
+    setLoading(prev => ({ ...prev, createRoomLoading: false }))
   };
 
   const handleOnClickLeavingRoom = () => {
@@ -85,14 +103,79 @@ const CodeBar = () => {
     setTheme(prev => prev === "vs-dark" ? "light" : "vs-dark");
   };
 
-  const handleJoinRoomCode = () => {
+  const handleJoinRoomCode = async () => {
     if (!/^\d{6}$/.test(roomsCode.joinRoomCode.trim())) {
       toast.error("Invalid Code.");
       return;
     }
-    handleRoomJoining(roomsCode.joinRoomCode);
-    setRoomCode(roomsCode.joinRoomCode);
-    setRoomStates(prev => ({ ...prev, isUserJoined: true, divState: false }));
+
+    setLoading(prev => ({ ...prev, joinRoomLoading: true }))
+    const res = await handleRoomJoining(roomsCode.joinRoomCode);
+    if (res) {
+      setRoomCode(roomsCode.joinRoomCode);
+      setRoomStates(prev => ({ ...prev, isUserJoined: true, divState: false }));
+      setLoading(prev => ({ ...prev, joinRoomLoading: false }))
+      return;
+    }
+    setLoading(prev => ({ ...prev, joinRoomLoading: false }))
+    toast.error("Unable to join room")
+    setRoomsCode(prev => ({ ...prev, joinRoomCode: "" }))
+  };
+
+  const handleAIGenerate = async () => {
+    if (!aiPrompt.trim()) {
+      toast.warning("Please enter a prompt");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const generatedCode = await generateCode(aiPrompt);
+
+      if (generatedCode) {
+        // Replace \n with actual newlines for Monaco editor
+        const formattedCode = generatedCode.replace(/\\n/g, '\n');
+
+        // Insert at cursor position using Monaco editor
+        if (editorInstance) {
+          const position = editorInstance.getPosition();
+          const range = new monaco.Range(
+            position.lineNumber,
+            position.column,
+            position.lineNumber,
+            position.column
+          );
+          editorInstance.executeEdits('ai-generation', [{
+            range: range,
+            text: formattedCode
+          }]);
+          // Move cursor to end of inserted text
+          const lines = formattedCode.split('\n');
+          const lastLine = position.lineNumber + lines.length - 1;
+          const lastColumn = lines.length === 1
+            ? position.column + formattedCode.length
+            : lines[lines.length - 1].length + 1;
+          editorInstance.setPosition({ lineNumber: lastLine, column: lastColumn });
+          editorInstance.focus();
+        } else if (yText) {
+          // Fallback: if no editor instance, replace all content
+          yText.delete(0, yText.length);
+          yText.insert(0, formattedCode);
+        } else {
+          setLocalCode(formattedCode);
+        }
+
+        toast.success("Code generated successfully!");
+        setAiPrompt("");
+      } else {
+        toast.error("Failed to generate code. Please try again.");
+      }
+    } catch (error) {
+      console.error("AI Generation Error:", error);
+      toast.error("An error occurred while generating code.");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -134,6 +217,27 @@ const CodeBar = () => {
             </div>
           )}
         </div>
+
+        {/* AI Prompt Input */}
+        <div className="flex items-center gap-2">
+          <input
+            className="w-72 px-3 py-1.5 text-sm bg-white border border-green-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-600"
+            type="text"
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+            placeholder="Describe code to generate..."
+            disabled={isGenerating}
+          />
+          <button
+            className="px-4 py-1.5 text-sm font-medium bg-white text-green-700 border border-green-700 hover:bg-green-800 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+            onClick={handleAIGenerate}
+            disabled={isGenerating}
+            title="Generate code with AI"
+          >
+            <Sparkles size={16} className={isGenerating ? "animate-pulse" : ""} />
+            {isGenerating ? "Generating..." : "Generate"}
+          </button>
+        </div>
       </div>
 
       {/* Right Section */}
@@ -143,7 +247,7 @@ const CodeBar = () => {
             <button
               className='px-4 py-1.5 text-sm font-medium text-green-800 border border-green-700 hover:bg-green-700 hover:text-white transition-colors'
               onClick={handleOnClickCreateRoom}>
-              Create Room
+              {loading.createRoomLoading ? "Creating..." : "Create Room"}
             </button>
             <button
               className='px-4 py-1.5 text-sm font-medium bg-white text-green-800 border border-green-300 hover:bg-green-50 transition-colors'
@@ -229,7 +333,7 @@ const CodeBar = () => {
                   <button
                     onClick={handleJoinRoomCode}
                     className='px-4 py-2 border border-green-700 text-green-800 hover:bg-green-700 hover:text-white transition-colors text-sm font-medium'>
-                    Join
+                    {loading.joinRoomLoading ? "Joining..." : "Join"}
                   </button>
                 </div>
               )}

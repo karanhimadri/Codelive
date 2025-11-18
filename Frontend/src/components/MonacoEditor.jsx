@@ -4,7 +4,7 @@ import { MonacoBinding } from "y-monaco";
 import { codeContext } from "../context/CodeContextProvider";
 
 const MonacoEditor = () => {
-  const { lang, theme, yText, yProvider } = useContext(codeContext);
+  const { lang, theme, yText, yProvider, setEditorInstance } = useContext(codeContext);
   const editorRef = useRef(null);
   const containerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +32,7 @@ const MonacoEditor = () => {
         theme: theme || "vs-dark",
         value: "", // initial empty; Yjs will sync actual code
         automaticLayout: true,
-        fontSize: 14,
+        fontSize: 12,
         lineHeight: 25,
         minimap: { enabled: false },
         wordWrap: "on",
@@ -45,6 +45,7 @@ const MonacoEditor = () => {
       });
 
       editorRef.current = editor;
+      setEditorInstance(editor); // Save to context for AI generation
 
       // Bind Monaco editor with Yjs
       monacoBinding = new MonacoBinding(
@@ -66,6 +67,7 @@ const MonacoEditor = () => {
       // Cleanup on unmount
       return () => {
         window.removeEventListener("keydown", handleSaveShortcut);
+        setEditorInstance(null); // Clear from context
         if (monacoBinding) {
           monacoBinding.destroy();
         }
