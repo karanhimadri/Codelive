@@ -19,6 +19,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js)](https://nodejs.org/)
 [![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8.1-010101?logo=socket.io)](https://socket.io/)
 [![Yjs](https://img.shields.io/badge/Yjs-13.6.18-ffcc00?labelColor=20232a&logo=y&logoColor=white)](https://github.com/yjs/yjs)
+[![Groq SDK](https://img.shields.io/badge/AI-Groq%20SDK-6d28d9?logo=spark&logoColor=white)](https://groq.com)
 
 [Features](#-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
@@ -28,7 +29,7 @@
 
 ## 📋 Overview
 
-**CodeLive** is a full-stack web application that enables multiple users to code together in real-time. Built with modern web technologies, it provides a seamless experience for collaborative coding sessions, technical interviews, and educational purposes. The platform combines the power of Monaco Editor (VS Code's editor) with real-time synchronization using Yjs and WebSocket technology.
+**CodeLive** is a full-stack web application that enables multiple users to code together in real-time. Built with modern web technologies, it provides a seamless experience for collaborative coding sessions, technical interviews, and educational purposes. The platform combines the power of Monaco Editor (VS Code's editor) with real-time synchronization using Yjs and WebSocket technology. Recent updates introduce **AI-assisted code generation** via a Groq-powered endpoint for rapid scaffolding and experimentation.
 
 ---
 ## 📸 **Project Screenshots**
@@ -87,6 +88,12 @@
 - **Theme Toggle** - Switch between light and dark modes
 - **Responsive UI** - Built with Tailwind CSS for modern aesthetics
 
+### AI Assistance
+- **Prompt-Based Code Generation** – Generate clean code snippets via `/api/ai/generate` (Groq Llama 3.3 model).
+- **Raw Output Enforcement** – Backend strips markdown/backticks for direct editor insertion.
+- **Simple Frontend Hook** – `useAI().generateCode(prompt)` from the `AiContext`.
+- **Graceful Failures** – Clear errors for missing/invalid API key.
+
 ---
 
 ## 🎯 Use Cases
@@ -123,6 +130,7 @@
 | **Yjs + y-websocket** | Collaborative editing synchronization |
 | **CORS** | Cross-origin resource sharing |
 | **dotenv** | Environment variable management |
+| **Groq SDK** | AI code generation (Llama models) |
 
 ---
 
@@ -145,7 +153,9 @@
 │  │   Express    │  │  Socket.IO   │  │  Y-Websocket │      │
 │  │   Server     │  │   Server     │  │   Server     │      │
 │  └──────────────┘  └──────────────┘  └──────────────┘      │
-│                                                            │
+│          ┌──────────────┐                                  │
+│          │   Groq AI    │  (/api/ai/generate)              │
+│          └──────────────┘                                  │
 └────────────────────────────────────────────────────────────┘
 ```
 ---
@@ -163,13 +173,20 @@ Make sure you have the following installed:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/karanhimadri/Codelive.git
-   cd Codellive
+   cd Codelive
    ```
 
 2. **Setup Backend**
    ```bash
    cd Backend
    npm install
+   ```
+
+   Create a `.env` file:
+   ```bash
+   # Backend/.env
+   PORT=8080
+   GROQ_API_KEY=your_groq_key_here
    ```
 
 3. **Setup Frontend**
@@ -194,17 +211,28 @@ Make sure you have the following installed:
    ```
    Application will open on `http://localhost:5173`
 
+### Using AI Code Generation (Optional)
+
+1. Ensure `GROQ_API_KEY` is set in `Backend/.env`.
+2. From the frontend, access the context:
+   ```jsx
+   import { useAI } from './context/AiContext';
+   const { generateCode } = useAI();
+   const code = await generateCode('Create a Fibonacci function in Python');
+   ```
+3. The backend returns raw code (no markdown) ready for editor insertion.
+
 ---
 
 ## 👨‍💻 Developer Profile
 
 **Himadri Karan**  
-*Backend Developer & Business Solutions Specialist*
+*Backend Developer & Software Engineer*
 
 - 📧 **Email**: [Karanhimadri1234@gmail.com](mailto:Karanhimadri1234@gmail.com)
 - 💼 **LinkedIn**: [linkedin.com/in/himadrikaran](https://linkedin.com/in/himadrikaran)  
 - 🌐 **Portfolio**: [Himadri.me](https://himadri.me)
-- � **GitHub**: [github.com/karanhimadri](https://github.com/karanhimadri)
+- 🐙 **GitHub**: [github.com/karanhimadri](https://github.com/karanhimadri)
 
 ---
 
