@@ -10,6 +10,7 @@ import FAQSection from './pages/FAQs';
 import ContactUsSection from './pages/ContactUs';
 import { authContext } from './context/AuthContextProvider';
 import { AlertTriangle } from 'lucide-react';
+import AuthPage from './pages/AuthPage';
 
 // Lazy load CodeSpace to reduce initial bundle size (Monaco Editor is heavy)
 const CodeSpace = lazy(() => import('./pages/CodeSpace'));
@@ -73,6 +74,7 @@ const App = () => {
         </div>
       )}
       <Navbar />
+      <AuthPage />
       <main className="flex-1 pt-16 lg:pt-20">
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[60vh] bg-gray-900">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Code, Users, GraduationCap, ArrowRight, Play, Star } from "lucide-react";
+import { Code, Users, GraduationCap, ArrowRight, Play, Star, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
@@ -43,7 +43,7 @@ const HomePage = () => {
   };
 
   return (
-  <div className="min-h-full bg-gradient-to-br from-green-50 via-emerald-50 to-green-100">
+    <div className="min-h-full bg-gradient-to-br from-green-50 via-emerald-50 to-green-100">
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
@@ -153,8 +153,47 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* AI Powered Section */}
+      <div className="py-14 bg-gradient-to-r from-emerald-50 via-green-100 to-emerald-50 border-y border-green-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-10">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-800 text-xs font-semibold tracking-wide mb-4">
+              <Sparkles className="w-4 h-4" /> AI POWERED
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+              Supercharge Collaboration with <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">AI Code Generation</span>
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-xl">
+              Instantly generate boilerplate, helper functions, test cases and more directly inside your shared editor. Our integrated AI helps teams move faster, stay focused and explore solutions together.
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 text-sm text-gray-700">
+              <li className="flex items-start gap-2"><span className="text-green-600">•</span> Context-aware code insertion</li>
+              <li className="flex items-start gap-2"><span className="text-green-600">•</span> Generates clean, readable output</li>
+              <li className="flex items-start gap-2"><span className="text-green-600">•</span> Works seamlessly with real-time sessions</li>
+              <li className="flex items-start gap-2"><span className="text-green-600">•</span> Safe fallback when editor not active</li>
+            </ul>
+            <button
+              onClick={handleNavigation}
+              className="px-8 py-3 border border-green-700 text-green-800 text-sm font-medium tracking-wide hover:bg-green-700 hover:text-white transition-colors inline-flex items-center">
+              Try AI Now <ArrowRight className="w-4 h-4 ml-2" />
+            </button>
+          </div>
+          <div className="flex-1 w-full max-w-md">
+            <div className="relative bg-white border border-green-200 p-5 shadow-sm">
+              <div className="absolute -top-3 -left-3 w-14 h-14 bg-green-600 text-white flex items-center justify-center rounded-full shadow-md">
+                <Sparkles className="w-7 h-7" />
+              </div>
+              <pre className="text-xs bg-gray-900 text-green-100 p-4 overflow-auto leading-relaxed font-mono border border-gray-800">
+                <code>{`# AI Example\n# Prompt: "Generate a function to reverse words in a sentence"\n\nfunction reverseWords(sentence) {\n  return sentence\n    .split(/\n| /)\n    .map(word => word.split('').reverse().join(''))\n    .join(' ');\n}\n\nconsole.log(reverseWords('Code Live Together'));`}</code>
+              </pre>
+              <p className="mt-4 text-xs text-gray-600">Generated sample output. Actual results adapt to your prompt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Features Section */}
-  <div className="py-20 bg-gradient-to-b from-white to-green-50">
+      <div className="py-20 bg-gradient-to-b from-white to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
