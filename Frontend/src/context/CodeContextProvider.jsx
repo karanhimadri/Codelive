@@ -32,7 +32,9 @@ const CodeContextProvider = ({ children }) => {
   const [yText, setYText] = useState(null);
 
   const SOCKET_URL = import.meta.env.VITE_API_URL;
-  const YJS_URL = `ws://${import.meta.env.VITE_YJS_WS_URL}/yjs`;
+  // Auto-detect ws:// vs wss:// based on page protocol (HTTPS requires wss://)
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const YJS_URL = `${wsProtocol}//${import.meta.env.VITE_YJS_WS_URL}/yjs`;
 
   // ================== Username Setup ==================
   useEffect(() => {
